@@ -28,21 +28,22 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                List<int?> lstStatus = new List<int?>();
-                if (string.IsNullOrEmpty(sequenceStatus))
-                    return new R_Data() { result = 0, data = null, error = new error() { code = 201, message = "Dãy trạng thái chưa nhập giá trị. Dãy trạng thái là ký số và cách nhau bởi dấu phẩy [,]" } };
-                try
-                {
-                    foreach (string s in sequenceStatus.Split(","))
-                        if (!string.IsNullOrEmpty(s))
-                            lstStatus.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
-                }
-                catch (Exception) { }
-                Expression<Func<Person, bool>> filter;
-                filter = w => lstStatus.Contains(w.Status);
-                filter.Compile();
-                res = await _personService.GetListAsync(filter);
-                res = await _personHelper.MergeDataList(res);
+                //List<int?> lstStatus = new List<int?>();
+                //if (string.IsNullOrEmpty(sequenceStatus))
+                //    return new R_Data() { result = 0, data = null, error = new error() { code = 201, message = "Dãy trạng thái chưa nhập giá trị. Dãy trạng thái là ký số và cách nhau bởi dấu phẩy [,]" } };
+                //try
+                //{
+                //    foreach (string s in sequenceStatus.Split(","))
+                //        if (!string.IsNullOrEmpty(s))
+                //            lstStatus.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
+                //}
+                //catch (Exception) { }
+                //Expression<Func<Person, bool>> filter;
+                //filter = w => lstStatus.Contains(w.Status);
+                //filter.Compile();
+                res = await _personService.GetListAsync(sequenceStatus);
+                //res = await _personHelper.MergeDataList(res);
+                res = await _personHelper.MergeDynamicList(res);
             }
             catch (Exception ex)
             {

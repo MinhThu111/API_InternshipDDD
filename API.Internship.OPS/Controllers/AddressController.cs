@@ -22,6 +22,36 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<R_Data>> getListAddressBySequenceStatus(string sequenceStatus)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                List<int?> lstStatus = new List<int?>();
+                if (string.IsNullOrEmpty(sequenceStatus))
+                    return new R_Data() { result = 0, data = null, error = new error() { code = 201, message = "Dãy trạng thái chưa nhập giá trị. Dãy trạng thái là ký số và cách nhau bởi dấu phẩy [,]" } };
+                try
+                {
+                    foreach (string s in sequenceStatus.Split(","))
+                        if (!string.IsNullOrEmpty(s))
+                            lstStatus.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
+                }
+                catch (Exception) { }
+                Expression<Func<Address, bool>> filter;
+                filter = w => lstStatus.Contains(w.Status);
+                filter.Compile();
+                res = await _addressService.GetListAsync(filter);
+                res = await _addressHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
         public async Task<ActionResult<R_Data>>getListAddress()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
@@ -74,7 +104,7 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<R_Data>>Create(Address item)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
@@ -99,6 +129,23 @@ namespace API.Internship.OPS.Controllers
             {
                 res = await _addressService.PutAsync(item.Id, item.Title, item.AddressNumber, item.AddressText, item.CountryId, item.ProvinceId, item.DistrictId, item.WardId, item.Timer);
                 res=await _addressHelper.MergeData(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpPut]
+        public async Task<ActionResult<R_Data>> UpdateStatus(Address ori)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                res = await _addressService.PutAsync(ori.Id, ori.Status ?? 0, ori.UpdatedBy ?? 0, ori.Timer);
+                res = await _addressHelper.MergeData(res);
             }
             catch (Exception ex)
             {

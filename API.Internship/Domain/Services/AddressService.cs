@@ -11,6 +11,7 @@ namespace API.Internship.Domain.Services
         Task<R_Data> Delete(int id, int? updatedBy);
         Task<R_Data> PutAsync(string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid);
         Task<R_Data> PutAsync(int id,string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid, DateTime? timer);
+        Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer);
     }
     public class AddressService: IAddressService
     {
@@ -174,6 +175,7 @@ namespace API.Internship.Domain.Services
             }
             Address item = new Address()
             {
+                Id=id,
                 Title = title,
                 AddressNumber = addressnumber,
                 AddressText = addresstext,
@@ -181,6 +183,13 @@ namespace API.Internship.Domain.Services
                 ProvinceId = provinceid,
                 DistrictId = districtid,
                 WardId = wardid,
+                Latitude=existAddress.Latitude,
+                Longitude=existAddress.Longitude,
+                Status=existAddress.Status,
+                CreatedAt=existAddress.CreatedAt,
+                CreatedBy=existAddress.CreatedBy,
+                UpdatedBy=existAddress.UpdatedBy,
+                Timer=existAddress.Timer,
                 UpdatedAt = DateTime.Now
             };
             try
@@ -203,6 +212,67 @@ namespace API.Internship.Domain.Services
 
 
             return await Task.Run(()=>res);
+        }
+        public async Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer)
+        {
+            error errObj = new error();
+            R_Data res = new R_Data() { result = 1, data = null, error = errObj };
+            var categoryObj = await Task.FromResult<Address>(new Address());
+
+
+            var existingAddress = await _unitOfWork.AddressRepository.GetId(id);
+            //var existingPerson = new InternshipContext().Persons.FirstOrDefault(f => f.Id == id);
+            if (existingAddress == null)
+                throw new Exception($"Person {id} không tìm thấy.");
+
+            if (existingAddress.Timer > timer)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error() { code = 201, message = "Thông tin đã được cập nhật lại trước đó. Vui lòng hủy thao tác và thực hiện lại để dữ liệu đồng bộ!" };
+                return res;
+            }
+
+            Address item = new Address
+            {
+                Id = existingAddress.Id,
+                Title=existingAddress.Title,
+                AddressNumber= existingAddress.AddressNumber,
+                AddressText= existingAddress.AddressText,
+                CountryId=existingAddress.CountryId,
+                ProvinceId=existingAddress.ProvinceId,
+                DistrictId=existingAddress.DistrictId,
+                WardId=existingAddress.WardId,
+                Latitude=existingAddress.Latitude,
+                Longitude=existingAddress.Longitude,
+                CreatedAt = existingAddress.CreatedAt,
+                CreatedBy = existingAddress.CreatedBy,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = updatedBy,
+                Status = status,
+                Timer = DateTime.Now,
+            };
+
+            try
+            {
+                await _unitOfWork.AddressRepository.UpdateAsync(item);
+                //await _unitOfWork.PersonRepository.UpdateAsync(item);
+                var result = await _unitOfWork.CommitAsync();
+                if (result > 0)
+                {
+                    categoryObj = await _unitOfWork.AddressRepository.GetId(item.Id);
+                    errObj.message = "Cập nhật dữ liệu thành công.";
+                }
+                res.data = categoryObj;
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi thêm dữ liệu {ex}" };
+
+            }
+            return res;
         }
     }
 }

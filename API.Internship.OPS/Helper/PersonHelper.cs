@@ -9,6 +9,7 @@ namespace API.Internship.OPS.Helper
     {
         public Task<R_Data> MergeData(R_Data res);
         public Task<R_Data> MergeDataList(R_Data res);
+        public Task<R_Data> MergeDynamicList(R_Data res);
     }
     public class PersonHelper : IPersonHelper
     {
@@ -216,7 +217,39 @@ namespace API.Internship.OPS.Helper
             }
             return await Task.Run(() => res);
         }
-        
+
+
+        public async Task<R_Data> MergeDynamicList(R_Data res)
+        {
+            List<Dictionary<string, dynamic>> lstdict = new List<Dictionary<string, dynamic>>();
+            try
+            {
+                if (res.result == 1 && res.data != null)
+                {
+
+                    var personObjs = res.data;
+                    foreach (var personObj in personObjs)
+                    {
+                        Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
+                        Type myType = personObj.GetType();
+                        IList<PropertyInfo> props = new List<PropertyInfo>(myType.GetProperties());
+                        foreach (PropertyInfo prop in props)
+                        {
+                            dict.Add(prop.Name, prop.GetValue(personObj));
+                        }
+                        lstdict.Add(dict);
+                    }
+                    res.data = lstdict;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error() { code = -1, message = $"Exeception: {ex.Message}" };
+            }
+            return await Task.Run(() => res);
+        }
 
     }
 }
