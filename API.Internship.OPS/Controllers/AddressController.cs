@@ -110,7 +110,7 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _addressService.PutAsync(item.Title, item.AddressNumber, item.AddressText, item.CountryId, item.ProvinceId, item.DistrictId, item.WardId);
+                res = await _addressService.PutAsync( item.AddressText, item.ProvinceId, item.DistrictId, item.WardId);
                 res = await _addressHelper.MergeData(res);
             }
             catch (Exception ex)
@@ -127,7 +127,7 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _addressService.PutAsync(item.Id, item.Title, item.AddressNumber, item.AddressText, item.CountryId, item.ProvinceId, item.DistrictId, item.WardId, item.Timer);
+                res = await _addressService.PutAsync(item.Id, item.AddressText, item.ProvinceId, item.DistrictId, item.WardId, item.Timer);
                 res=await _addressHelper.MergeData(res);
             }
             catch (Exception ex)

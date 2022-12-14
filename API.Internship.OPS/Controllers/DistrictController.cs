@@ -22,7 +22,7 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetDistrictById(int id)
+        public async Task<ActionResult<R_Data>> getDistrictById(int id)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -39,13 +39,34 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetListDistrict()
+        public async Task<ActionResult<R_Data>> getListDistrictByStatusProvinceId(int provinceId)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                Expression<Func<District, bool>> filter;
+                filter = w => w.Status == 1 && w.ProvinceId==provinceId;
+                filter.Compile();
+                res = await _districtService.GetListAsync(filter);
+                res = await _districtHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getListDistrict()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
                 Expression<Func<District, bool>> filter;
                 filter = w => w.Status == 1;
+                filter.Compile();
                 res = await _districtService.GetListAsync(filter);
                 res = await _districtHelper.MergeDataList(res);
             }

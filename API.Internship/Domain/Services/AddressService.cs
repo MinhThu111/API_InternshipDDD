@@ -9,8 +9,8 @@ namespace API.Internship.Domain.Services
         Task<R_Data> GetAsync(int id);
         Task<R_Data> GetListAsync(Expression<Func<Address, bool>> expression);
         Task<R_Data> Delete(int id, int? updatedBy);
-        Task<R_Data> PutAsync(string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid);
-        Task<R_Data> PutAsync(int id,string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid, DateTime? timer);
+        Task<R_Data> PutAsync( string addresstext, int provinceid, int districtid, int wardid);
+        Task<R_Data> PutAsync(int id, string addresstext,  int provinceid, int districtid, int wardid, DateTime? timer);
         Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer);
     }
     public class AddressService: IAddressService
@@ -112,7 +112,7 @@ namespace API.Internship.Domain.Services
             return res;
         }
 
-        public async Task<R_Data> PutAsync(string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid) 
+        public async Task<R_Data> PutAsync( string addresstext, int provinceid, int districtid, int wardid) 
         {
             error errObj = new error();
             R_Data res = new R_Data { result = 1, data = null, error = errObj };
@@ -124,13 +124,15 @@ namespace API.Internship.Domain.Services
             Address item = new Address()
             {
                 Id = idMax.data + 1,
-                Title = title,
-                AddressNumber = addressnumber,
+                Title = null,
+                AddressNumber = null,
                 AddressText = addresstext,
-                CountryId = countryid,
+                CountryId = 1,
                 ProvinceId = provinceid,
                 DistrictId = districtid,
                 WardId = wardid,
+                CreatedAt= DateTime.Now,
+                UpdatedAt=DateTime.Now,
                 Timer = DateTime.Now,
                 Status = 1
             };
@@ -156,7 +158,7 @@ namespace API.Internship.Domain.Services
             return res;
         }
 
-        public async Task<R_Data> PutAsync(int id, string title, string addressnumber, string addresstext, int? countryid, int provinceid, int districtid, int wardid, DateTime? timer)
+        public async Task<R_Data> PutAsync(int id, string addresstext, int provinceid, int districtid, int wardid, DateTime? timer)
         {
             error errObj = new error();
             R_Data res = new R_Data { result = 1, data = null, error = errObj };
@@ -176,10 +178,10 @@ namespace API.Internship.Domain.Services
             Address item = new Address()
             {
                 Id=id,
-                Title = title,
-                AddressNumber = addressnumber,
+                Title = existAddress.Title,
+                AddressNumber = existAddress.AddressNumber,
                 AddressText = addresstext,
-                CountryId = countryid,
+                CountryId = 1,
                 ProvinceId = provinceid,
                 DistrictId = districtid,
                 WardId = wardid,
@@ -190,7 +192,8 @@ namespace API.Internship.Domain.Services
                 CreatedBy=existAddress.CreatedBy,
                 UpdatedBy=existAddress.UpdatedBy,
                 Timer=existAddress.Timer,
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
+                
             };
             try
             {

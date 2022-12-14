@@ -204,6 +204,131 @@ namespace API.Internship.OPS.Helper
                         {
                             dict.Add(prop.Name, prop.GetValue(personObj));
                         }
+                        //persontype obj 
+                        dict.Add("PersonTypeObj", new Dictionary<string, dynamic>());
+                        R_Data resPersonType = _persontypeService.GetAsync((int)personObj.PersonTypeId).Result;
+                        if (resPersonType.result == 1 && resPersonType.data != null)
+                        {
+                            PersonType Persontypeitem = resPersonType.data;
+                            dict["PersonTypeObj"] = new
+                            {
+                                Persontypeitem.Id,
+                                Persontypeitem.Name
+                            };
+                        }
+
+                        //NationalityId obj
+                        dict.Add("NationalityObj", new Dictionary<string, dynamic>());
+                        R_Data resNationality = _nationalityService.GetAsync((int)personObj.NationalityId).Result;
+                        if (resNationality.result == 1 && resNationality.data != null)
+                        {
+                            Nationality nationalityitem = resNationality.data;
+                            dict["NationalityObj"] = new
+                            {
+                                nationalityitem.Id,
+                                nationalityitem.Name,
+                                nationalityitem.NameSlug
+                            };
+                        }
+
+                        //ReligionId obj
+                        dict.Add("ReligionObj", new Dictionary<string, dynamic>());
+                        R_Data resReligion = _religionService.GetAsync((int)personObj.ReligionId).Result;
+                        if (resReligion.result == 1 && resReligion.data != null)
+                        {
+                            Religion religionitem = resReligion.data;
+                            dict["ReligionObj"] = new
+                            {
+                                religionitem.Id,
+                                religionitem.Name,
+                                religionitem.NameSlug
+                            };
+                        }
+
+                        //FolkId obj
+                        dict.Add("FolkObj", new Dictionary<string, dynamic>());
+                        R_Data resFolk = _folkService.GetAsync((int)personObj.FolkId).Result;
+                        if (resFolk.result == 1 && resFolk.data != null)
+                        {
+                            Folk folkitem = resFolk.data;
+                            dict["FolkObj"] = new
+                            {
+                                folkitem.Id,
+                                folkitem.Name,
+                                folkitem.NameSlug
+                            };
+                        }
+
+                        //AddressId obj
+                        dict.Add("AddressObj", new Dictionary<string, dynamic>());
+                        R_Data resAddress = _addressService.GetAsync((int)personObj.AddressId).Result;
+                        if (resAddress.result == 1 && resAddress.data != null)
+                        {
+                            Address addressitem = resAddress.data;
+                            Dictionary<string, dynamic> dictitem = new Dictionary<string, dynamic>();
+
+                            Type AddressType = addressitem.GetType();
+                            IList<PropertyInfo> Addressprops = new List<PropertyInfo>(AddressType.GetProperties());
+                            foreach (PropertyInfo prop in Addressprops)
+                            {
+                                dictitem.Add(prop.Name, prop.GetValue(addressitem));
+                            }
+
+                            //country obj
+                            dictitem.Add("CountryObj", new Dictionary<string, dynamic>());
+                            R_Data resCountry = _countryService.GetAsync((int)addressitem.CountryId).Result;
+                            if (resCountry.result == 1 && resCountry.data != null)
+                            {
+                                Country countryitem = resCountry.data;
+                                dictitem["CountryObj"] = new
+                                {
+                                    countryitem.Id,
+                                    countryitem.Name
+                                };
+                            }
+                            //ProvinceId obj
+                            dictitem.Add("ProvinceObj", new Dictionary<string, dynamic>());
+                            R_Data resProvince = _provinceService.GetAsync((int)addressitem.ProvinceId).Result;
+                            if (resProvince.result == 1 && resProvince.data != null)
+                            {
+                                Province provinceitem = resProvince.data;
+                                dictitem["ProvinceObj"] = new
+                                {
+                                    provinceitem.Id,
+                                    provinceitem.Name,
+                                };
+                            }
+
+                            //DistrictId obj
+                            dictitem.Add("DistrictObj", new Dictionary<string, dynamic>());
+                            R_Data resDistric = _districtService.GetAsync((int)addressitem.DistrictId).Result;
+                            if (resDistric.result == 1 && resDistric.data != null)
+                            {
+                                District districitem = resDistric.data;
+                                dictitem["DistrictObj"] = new
+                                {
+                                    districitem.Id,
+                                    districitem.Name
+                                };
+                            }
+
+                            //Ward obj
+                            dictitem.Add("WardObj", new Dictionary<string, dynamic>());
+                            R_Data resWard = _wardService.GetAsync((int)addressitem.WardId).Result;
+                            if (resWard.result == 1 && resWard.data != null)
+                            {
+                                Ward Warditem = resWard.data;
+                                dictitem["DistrictObj"] = new
+                                {
+                                    Warditem.Id,
+                                    Warditem.Name1
+                                };
+                            }
+                            dict["AddressObj"] = dictitem;
+
+                        }
+
+
                         lstdict.Add(dict);
                     });
                     res.data = lstdict;

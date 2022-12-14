@@ -3,6 +3,7 @@ using API.Internship.Domain.Services;
 using API.Internship.OPS.Helper;
 using API.Internship.ResData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq.Expressions;
 
 namespace API.Internship.OPS.Controllers
@@ -29,6 +30,23 @@ namespace API.Internship.OPS.Controllers
             {
                 res = await _provinceService.GetAsync(id);
                 res = await _provinceHelper.MergeData(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getListProvinceByStatusCountryId(int? countryId)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                res = await _provinceService.GetListAsync(countryId);
+                res = await _provinceHelper.MergeDynamicList(res);
             }
             catch (Exception ex)
             {
