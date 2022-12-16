@@ -167,10 +167,10 @@ namespace API.Internship.OPS.Helper
                         if (resWard.result == 1 && resWard.data != null)
                         {
                             Ward Warditem = resWard.data;
-                            dictitem["DistrictObj"] = new
+                            dictitem["WardObj"] = new
                             {
                                 Warditem.Id,
-                                Warditem.Name1
+                                Warditem.Name
                             };
                         }
                         dict["AddressObj"] = dictitem;
@@ -274,18 +274,18 @@ namespace API.Internship.OPS.Helper
                                 dictitem.Add(prop.Name, prop.GetValue(addressitem));
                             }
 
-                            //country obj
-                            dictitem.Add("CountryObj", new Dictionary<string, dynamic>());
-                            R_Data resCountry = _countryService.GetAsync((int)addressitem.CountryId).Result;
-                            if (resCountry.result == 1 && resCountry.data != null)
-                            {
-                                Country countryitem = resCountry.data;
-                                dictitem["CountryObj"] = new
-                                {
-                                    countryitem.Id,
-                                    countryitem.Name
-                                };
-                            }
+                            ////country obj
+                            //dictitem.Add("CountryObj", new Dictionary<string, dynamic>());
+                            //R_Data resCountry = _countryService.GetAsync((int)addressitem.CountryId).Result;
+                            //if (resCountry.result == 1 && resCountry.data != null)
+                            //{
+                            //    Country countryitem = resCountry.data;
+                            //    dictitem["CountryObj"] = new
+                            //    {
+                            //        countryitem.Id,
+                            //        countryitem.Name
+                            //    };
+                            //}
                             //ProvinceId obj
                             dictitem.Add("ProvinceObj", new Dictionary<string, dynamic>());
                             R_Data resProvince = _provinceService.GetAsync((int)addressitem.ProvinceId).Result;
@@ -318,10 +318,10 @@ namespace API.Internship.OPS.Helper
                             if (resWard.result == 1 && resWard.data != null)
                             {
                                 Ward Warditem = resWard.data;
-                                dictitem["DistrictObj"] = new
+                                dictitem["WardObj"] = new
                                 {
                                     Warditem.Id,
-                                    Warditem.Name1
+                                    Warditem.Name
                                 };
                             }
                             dict["AddressObj"] = dictitem;

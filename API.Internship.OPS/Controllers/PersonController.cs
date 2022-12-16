@@ -23,12 +23,13 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> getListPersonBySequenceStatus(string sequenceStatus)
+        public async Task<ActionResult<R_Data>> getListPersonBySequenceStatus(string sequenceStatus,string lstpersontypeid)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
                 List<int?> lstStatus = new List<int?>();
+                List<int?> lstPersonType = new List<int?>();
                 if (string.IsNullOrEmpty(sequenceStatus))
                     return new R_Data() { result = 0, data = null, error = new error() { code = 201, message = "Dãy trạng thái chưa nhập giá trị. Dãy trạng thái là ký số và cách nhau bởi dấu phẩy [,]" } };
                 try
@@ -36,11 +37,14 @@ namespace API.Internship.OPS.Controllers
                     foreach (string s in sequenceStatus.Split(","))
                         if (!string.IsNullOrEmpty(s))
                             lstStatus.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
+                    foreach (string s in lstpersontypeid.Split(","))
+                        if (!string.IsNullOrEmpty(s))
+                            lstPersonType.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
                 }
                 catch (Exception) { }
                 Expression<Func<Person, bool>> filter;
-                filter = w => lstStatus.Contains(w.Status);
-                filter.Compile();
+                filter = w => lstStatus.Contains(w.Status) && lstPersonType.Contains(w.PersonTypeId);
+                filter.Compile(); 
                 res = await _personService.GetListAsync(filter);
                 res = await _personHelper.MergeDataList(res);
                 //res = await _personHelper.MergeDynamicList(res);
@@ -62,6 +66,23 @@ namespace API.Internship.OPS.Controllers
             {
                 res = await _personService.GetAsync(id);
                 res = await _personHelper.MergeData(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getCountPersonByPersonType()
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                res = await _personService.GetListAsync();
+                res = await _personHelper.MergeDynamicList(res);
             }
             catch (Exception ex)
             {
@@ -114,7 +135,7 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _personService.PutAsync(item.Id, item.FirstName, item.LastName, item.Gender??0, item.PersonTypeId, item.Timer, item.Status??0, item.AddressId??0, item.PhoneNumber);
+                res = await _personService.PutAsync(item.Id, item.FirstName, item.LastName, item.Gender??0, item.PersonTypeId, item.Timer, item.Status??0, item.AddressId??0, item.PhoneNumber, item.Email);
                 res = await _personHelper.MergeData(res);
             }
             catch (Exception ex)

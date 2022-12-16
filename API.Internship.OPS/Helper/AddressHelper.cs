@@ -96,7 +96,7 @@ namespace API.Internship.OPS.Helper
                         dict["WardObj"] = new
                         {
                             warditem.Id,
-                            warditem.Name1,
+                            warditem.Name,
                             warditem.DistrictId
                         };
                     }

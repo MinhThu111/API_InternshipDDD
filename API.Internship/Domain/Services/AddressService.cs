@@ -7,6 +7,7 @@ namespace API.Internship.Domain.Services
     public interface IAddressService
     {
         Task<R_Data> GetAsync(int id);
+        Task<R_Data> GetAsync(int provinceId, int districtId, int wardId);
         Task<R_Data> GetListAsync(Expression<Func<Address, bool>> expression);
         Task<R_Data> Delete(int id, int? updatedBy);
         Task<R_Data> PutAsync( string addresstext, int provinceid, int districtid, int wardid);
@@ -70,6 +71,34 @@ namespace API.Internship.Domain.Services
             {
                 categoryObj = await _unitOfWork.AddressRepository.GetId(id);
                 if(categoryObj==null)
+                {
+                    errObj.message = "Load data is successful and do not data to show!";
+                }
+                else
+                {
+                    res.data = categoryObj;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi đọc dữ liệu {ex}" };
+            }
+            return res;
+        }
+        public async Task<R_Data> GetAsync(int provinceId, int districtId, int wardId)
+        {
+            error errObj = new error();
+            R_Data res = new R_Data { result = 1, data = null, error = errObj };
+            var categoryObj = await Task.FromResult<Address>(new Address());
+            try
+            {
+                Expression<Func<Address, bool>> filter;
+                filter = w => w.Status == 1 && w.ProvinceId==provinceId && w.DistrictId==districtId && w.WardId==wardId;
+                filter.Compile();
+                categoryObj = _unitOfWork.AddressRepository.Find(filter);
+                if (categoryObj == null)
                 {
                     errObj.message = "Load data is successful and do not data to show!";
                 }

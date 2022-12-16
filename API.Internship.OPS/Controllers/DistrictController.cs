@@ -39,7 +39,7 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> getListDistrictByStatusProvinceId(int provinceId)
+        public async Task<ActionResult<R_Data>> getListDistrictByStatusProvinceId(int? provinceId)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try

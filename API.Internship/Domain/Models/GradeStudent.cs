@@ -20,5 +20,6 @@ namespace API.Internship.Domain.Models
         public DateTime Timer { get; set; }
 
         public virtual Grade Grade { get; set; }
+        public virtual Position Position { get; set; }
     }
 }

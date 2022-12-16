@@ -6,7 +6,7 @@ namespace API.Internship.Domain.Models
     public partial class Ward
     {
         public int Id { get; set; }
-        public string Name1 { get; set; }
+        public string Name { get; set; }
         public string NameSlug { get; set; }
         public string WardCode { get; set; }
         public int DistrictId { get; set; }

@@ -59,6 +59,7 @@ namespace API.Internship.OPS.Controllers
             {
                 Expression<Func<Address, bool>> filter;
                 filter = w => w.Status == 1;
+                filter.Compile();
                 res = await _addressService.GetListAsync(filter);
                 res = await _addressHelper.MergeDataList(res);
             }
@@ -77,6 +78,23 @@ namespace API.Internship.OPS.Controllers
             try
             {
                 res = await _addressService.GetAsync(id);
+                res = await _addressHelper.MergeData(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getListAddressByProvinceDistrictWardId(Address ori)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                res = await _addressService.GetAsync(ori.ProvinceId, ori.DistrictId, ori.WardId);
                 res = await _addressHelper.MergeData(res);
             }
             catch (Exception ex)

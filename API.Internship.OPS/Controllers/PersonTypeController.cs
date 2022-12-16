@@ -27,7 +27,7 @@ public class PersonTypeController : ControllerBase
         try
         {
             Expression<Func<PersonType, bool>> filter;
-            filter = w => w.Status != -1;
+            filter = w => w.Status == 1;
             res = await _persontypeService.GetListAsync(filter);
             res = await _persontypeHelper.MergeDataList(res);
         }

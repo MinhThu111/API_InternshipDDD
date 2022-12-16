@@ -320,6 +320,11 @@ namespace API.Internship.Infrastructure.Data
                     .WithMany(p => p.GradeStudents)
                     .HasForeignKey(d => d.GradeId)
                     .HasConstraintName("FK_ClassPerson_Class");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.GradeStudents)
+                    .HasForeignKey(d => d.PositionId)
+                    .HasConstraintName("FK_GradeStudent_Position");
             });
 
             modelBuilder.Entity<Nationality>(entity =>
@@ -629,17 +634,17 @@ namespace API.Internship.Infrastructure.Data
 
             modelBuilder.Entity<Position>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Position");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
 
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime")
                     .HasColumnName("created_at");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
-
-                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -666,15 +671,9 @@ namespace API.Internship.Infrastructure.Data
                     .HasColumnName("updated_at");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Position_ClassPerson");
             });
 
-            ModelBuilder modelBuilder1 = modelBuilder.Entity<Province>(entity =>
+            modelBuilder.Entity<Province>(entity =>
             {
                 entity.ToTable("Province");
 
@@ -1042,10 +1041,10 @@ namespace API.Internship.Infrastructure.Data
 
                 entity.Property(e => e.DistrictId).HasColumnName("district_id");
 
-                entity.Property(e => e.Name1)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .HasColumnName("name1");
+                    .HasColumnName("name");
 
                 entity.Property(e => e.NameSlug)
                     .HasMaxLength(100)
