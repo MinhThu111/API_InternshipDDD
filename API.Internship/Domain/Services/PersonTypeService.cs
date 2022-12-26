@@ -62,7 +62,6 @@ namespace API.Internship.Domain.Services
 
             return res;
         }
-
         public async Task<R_Data> GetAsync(int id)
         {
             error errObj = new error();

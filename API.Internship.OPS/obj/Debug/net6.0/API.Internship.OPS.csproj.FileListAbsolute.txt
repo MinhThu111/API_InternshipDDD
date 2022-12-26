@@ -127,7 +127,6 @@ C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.I
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.AssemblyInfoInputs.cache
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.AssemblyInfo.cs
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.csproj.CoreCompileInputs.cache
-C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\staticwebassets\msbuild.API.Internship.OPS.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\staticwebassets\msbuild.build.API.Internship.OPS.props
@@ -143,3 +142,4 @@ C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.I
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.pdb
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.genruntimeconfig.cache
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\ref\API.Internship.OPS.dll
+C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.MvcApplicationPartsAssemblyInfo.cs

@@ -27,7 +27,7 @@ public class PersonTypeController : ControllerBase
         try
         {
             Expression<Func<PersonType, bool>> filter;
-            filter = w => w.Status != -1;
+            filter = w => w.Status == 1;
             res = await _persontypeService.GetListAsync(filter);
             res = await _persontypeHelper.MergeDataList(res);
         }
@@ -75,7 +75,7 @@ public class PersonTypeController : ControllerBase
         }
         return res;
     }
-    [HttpPut]
+    [HttpPost]
     public async Task<ActionResult<R_Data>>Create(PersonType item)
     {
         R_Data res = new R_Data { result = 1, data = null, error = new error() };

@@ -166,7 +166,7 @@ namespace API.Internship.OPS.Helper
                                 dictaddress["WardObj"] = new
                                 {
                                     warditem.Id,
-                                    warditem.Name1
+                                    warditem.Name
                                 };
                             }
                             dictitem["AddressObj"] = dictaddress;

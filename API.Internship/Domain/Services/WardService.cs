@@ -128,7 +128,7 @@ namespace API.Internship.Domain.Services
             }
             Ward item = new Ward()
             {
-                Name1 = name,
+                Name = name,
                 NameSlug = nameslug,
                 WardCode = wardcode,
                 UpdatedBy = updateby,
@@ -166,7 +166,7 @@ namespace API.Internship.Domain.Services
             Ward item = new Ward()
             {
                 Id = idMax.data + 1,
-                Name1 = name,
+                Name = name,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Timer = DateTime.Now,

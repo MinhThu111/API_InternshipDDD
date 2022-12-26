@@ -23,7 +23,7 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetWardById(int id)
+        public async Task<ActionResult<R_Data>> getWardById(int id)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -40,7 +40,27 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetListWard()
+        public async Task<ActionResult<R_Data>> getListWardByStatusDistrictId(int? districtId)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                Expression<Func<Ward, bool>> filter;
+                filter = w => w.Status == 1 && w.DistrictId==districtId;
+                filter.Compile();
+                res = await _wardService.GetListAsync(filter);
+                res = await _wardHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getListWard()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -81,7 +101,7 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _wardService.PutAsync(item.Id, item.Name1, item.NameSlug, item.WardCode, item.UpdatedBy, item.Timer);
+                res = await _wardService.PutAsync(item.Id, item.Name, item.NameSlug, item.WardCode, item.UpdatedBy, item.Timer);
                 res = await _wardHelper.MergeData(res);
             }
             catch (Exception ex)
@@ -92,13 +112,13 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<R_Data>> Create(Ward item)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _wardService.PutAsync(item.Name1, item.NameSlug, item.WardCode, item.DistrictId);
+                res = await _wardService.PutAsync(item.Name, item.NameSlug, item.WardCode, item.DistrictId);
                 res = await _wardHelper.MergeData(res);
             }
             catch (Exception ex)

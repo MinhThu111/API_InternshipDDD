@@ -5,6 +5,11 @@ namespace API.Internship.Domain.Models
 {
     public partial class Position
     {
+        public Position()
+        {
+            GradeStudents = new HashSet<GradeStudent>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string PositionCode { get; set; }
@@ -16,6 +21,6 @@ namespace API.Internship.Domain.Models
         public int? UpdatedBy { get; set; }
         public DateTime Timer { get; set; }
 
-        public virtual GradeStudent IdNavigation { get; set; }
+        public virtual ICollection<GradeStudent> GradeStudents { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace API.Internship.Domain.Models
         public int? ReligionId { get; set; }
         public int? FolkId { get; set; }
         public int? AddressId { get; set; }
+        public string AvatarUrl { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Remark { get; set; }

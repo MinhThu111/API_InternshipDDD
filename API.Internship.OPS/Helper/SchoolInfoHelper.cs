@@ -105,7 +105,7 @@ namespace API.Internship.OPS.Helper
                             dictAddress["DistrictObj"] = new
                             {
                                 Warditem.Id,
-                                Warditem.Name1
+                                Warditem.Name
                             };
                         }
 

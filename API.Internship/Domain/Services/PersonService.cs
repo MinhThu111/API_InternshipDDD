@@ -1,6 +1,7 @@
 ﻿using API.Internship.Domain.Interfaces;
 using API.Internship.Domain.Models;
 using API.Internship.ResData;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Linq.Expressions;
 using System.Xml.Linq;
 
@@ -10,9 +11,11 @@ namespace API.Internship.Domain.Services
     {
         Task<R_Data> GetAsync(int id);
         Task<R_Data> GetListAsync(Expression<Func<Person, bool>> expression);
+        Task<R_Data> GetListAsync();
+        //Task<R_Data> GetListAsync(string status);
         Task<R_Data> Delete(int id, int? updatedBy);
-        Task<R_Data> PutAsync(int id, string firstname, string lastname, int? gender, int persontypeid, DateTime timer, int? status, int? address, string phone);
-        Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email);
+        Task<R_Data> PutAsync(int id, string firstname, string lastname, int? gender, int persontypeid, DateTime timer, int? status, int? addressid, string phonenumber, string email);
+        Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email, string avatarurl);
         Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer);
     }
     public class PersonService: IPersonService
@@ -24,7 +27,6 @@ namespace API.Internship.Domain.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-
 
         public async Task<R_Data> GetAsync(int id)
         {
@@ -59,6 +61,40 @@ namespace API.Internship.Domain.Services
                     errObj.message = "Load data is successful and do not data to show!";
                 else
                     res.data = lstPersons;
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi đọc dữ liệu {ex}" };
+            }
+            return res;
+
+        }
+        public async Task<R_Data> GetListAsync()
+        {
+            error errObj = new error();
+            R_Data res = new R_Data() { result = 1, data = null, error = errObj };
+            var lstPersons = await Task.FromResult<List<Person>>(new List<Person>());
+            try
+            {
+                Expression<Func<Person, bool>> filter;
+                filter = w => w.Status == 1;
+                filter.Compile();
+                lstPersons = (await _unitOfWork.PersonRepository.ListAsync(filter)).ToList();
+
+                var datacount = from item in lstPersons
+                                group item by item.PersonTypeId into lstitem
+                                select new
+                                {
+                                    name = lstitem.Key==1?"student":"teacher",
+                                    count = lstitem.Count(),
+                                };
+
+                if (datacount.Count()   <= 0)
+                    errObj.message = "Load data is successful and do not data to show!";
+                else
+                    res.data = datacount;
             }
             catch (Exception ex)
             {
@@ -106,7 +142,7 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-        public async Task<R_Data> PutAsync(int id, string firstname, string lastname, int? gender, int persontypeid, DateTime timer, int? status, int? address, string phone)
+        public async Task<R_Data> PutAsync(int id, string firstname, string lastname, int? gender, int persontypeid, DateTime timer, int? status, int? addressid, string phonenumber, string email)
         {
             error errObj = new error();
             R_Data res = new R_Data { result = 1, data = null, error = errObj };
@@ -132,13 +168,13 @@ namespace API.Internship.Domain.Services
                 Gender = gender,
                 PersonTypeId = persontypeid,
                 Status = status,
-                AddressId = address,
-                PhoneNumber = phone,
+                AddressId = addressid,
+                PhoneNumber = phonenumber,
                 Birthday = existingPerson.Birthday,
                 NationalityId = existingPerson.NationalityId,
                 ReligionId = existingPerson.ReligionId,
                 FolkId = existingPerson.FolkId,
-                Email = existingPerson.Email,
+                Email = email,
                 Timer = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
@@ -163,7 +199,7 @@ namespace API.Internship.Domain.Services
             return res;
 
         }
-        public async Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email)
+        public async Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email, string avatarurl)
         {
             error errObj = new error();
             R_Data res = new R_Data { result = 1, data = null, error = errObj };
@@ -186,6 +222,7 @@ namespace API.Internship.Domain.Services
                 AddressId = addressid,
                 PhoneNumber = phone,
                 Email = email,
+                AvatarUrl=avatarurl,
                 Timer = DateTime.Now,
                 CreatedAt = DateTime.Now
             };

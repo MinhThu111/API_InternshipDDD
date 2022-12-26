@@ -108,7 +108,6 @@ public class ParentContactService: IParentContactService
         }
         return res;
     }
-
     public async Task<R_Data> PutAsync(int id, string firstname, string lastname, DateTime timer, int addressid, string phone)
     {
         error errObj = new error();
@@ -154,7 +153,6 @@ public class ParentContactService: IParentContactService
 
         return res;
     }
-
     public async Task<R_Data> PutAsync(string fsname, string lsname, int addressid, string phone, string email)
     {
         error errObj = new error();

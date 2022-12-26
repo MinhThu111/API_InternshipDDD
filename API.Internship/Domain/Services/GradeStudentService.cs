@@ -108,7 +108,6 @@ public class GradeStudentService: IGradeStudentService
         }
         return res;
     }
-
     public async Task<R_Data> PutAsync(int id, int? gradeid, int? studentid, int? postionid, DateTime? timer, int? updateby)
     {
         error errObj = new error();
@@ -154,7 +153,6 @@ public class GradeStudentService: IGradeStudentService
 
         return res;
     }
-
     public async Task<R_Data> PutAsync(int? gradeid, int? studentid, int? postionid)
     {
         error errObj = new error();

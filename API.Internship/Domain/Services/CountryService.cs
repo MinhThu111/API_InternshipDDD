@@ -11,6 +11,7 @@ namespace API.Internship.Domain.Services
         Task<R_Data> Delete(int id, int? updatedBy);
         Task<R_Data> PutAsync(int id, string name, string remark, int? updateby, DateTime timer);
         Task<R_Data> PutAsync(string name);
+        Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer);
     }
     public class CountryService: ICountryService
     {
@@ -107,7 +108,6 @@ namespace API.Internship.Domain.Services
             }
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(int id, string name, string remark, int? updateby, DateTime timer)
         {
             error errObj = new error();
@@ -118,19 +118,26 @@ namespace API.Internship.Domain.Services
             {
                 throw new Exception($"Grade {id} không tìm thấy.");
             }
-            //if (existCountry.Timer > timer)
-            //{
-            //    res.result = 0;
-            //    res.data = null;
-            //    res.error = new error() { code = 201, message = "Thông tin đã được cập nhật lại trước đó. Vui lòng hủy thao tác và thực hiện lại để dữ liệu đồng bộ!" };
-            //    return res;
-            //}
+            if (existCountry.Timer > timer)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error() { code = 201, message = "Thông tin đã được cập nhật lại trước đó. Vui lòng hủy thao tác và thực hiện lại để dữ liệu đồng bộ!" };
+                return res;
+            }
             Country item = new Country()
             {
+                Id=id,
                 Name = name,
                 Remark = remark,
                 UpdatedBy = updateby,
-                UpdatedAt = DateTime.Now
+                NameSlug = existCountry.NameSlug,
+                CountryCode = existCountry.CountryCode,
+                CreatedAt = existCountry.CreatedAt,
+                CreatedBy = existCountry.CreatedBy,
+                UpdatedAt = DateTime.Now,
+                Status = existCountry.Status,
+                Timer = DateTime.Now,
             };
             try
             {
@@ -152,7 +159,6 @@ namespace API.Internship.Domain.Services
 
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(string name)
         {
             error errObj = new error();
@@ -194,6 +200,62 @@ namespace API.Internship.Domain.Services
 
 
             return await Task.Run(() => res);
+        }
+        public async Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer)
+        {
+            error errObj = new error();
+            R_Data res = new R_Data() { result = 1, data = null, error = errObj };
+            var categoryObj = await Task.FromResult<Country>(new Country());
+
+
+            var existingCountry = await _unitOfWork.CountryRepository.GetId(id);
+            //var existingPerson = new InternshipContext().Persons.FirstOrDefault(f => f.Id == id);
+            if (existingCountry == null)
+                throw new Exception($"Person {id} không tìm thấy.");
+
+            if (existingCountry.Timer > timer)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error() { code = 201, message = "Thông tin đã được cập nhật lại trước đó. Vui lòng hủy thao tác và thực hiện lại để dữ liệu đồng bộ!" };
+                return res;
+            }
+
+            Country item = new Country
+            {
+                Id = existingCountry.Id,
+                Name=existingCountry.Name,
+                NameSlug=existingCountry.Name,
+                CountryCode=existingCountry.CountryCode,
+                Remark=existingCountry.Remark,
+                CreatedAt = existingCountry.CreatedAt,
+                CreatedBy = existingCountry.CreatedBy,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = updatedBy,
+                Status = status,
+                Timer = DateTime.Now,
+            };
+
+            try
+            {
+                await _unitOfWork.CountryRepository.UpdateAsync(item);
+                //await _unitOfWork.PersonRepository.UpdateAsync(item);
+                var result = await _unitOfWork.CommitAsync();
+                if (result > 0)
+                {
+                    categoryObj = await _unitOfWork.CountryRepository.GetId(item.Id);
+                    errObj.message = "Cập nhật dữ liệu thành công.";
+                }
+                res.data = categoryObj;
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi thêm dữ liệu {ex}" };
+
+            }
+            return res;
         }
     }
 }

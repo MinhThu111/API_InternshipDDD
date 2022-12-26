@@ -14,6 +14,7 @@ namespace API.Internship.Domain.Models
         /// </summary>
         public string Description { get; set; }
         public string Detail { get; set; }
+        public string AvatarUrl { get; set; }
         public int? Status { get; set; }
         public DateTime? CreatedAt { get; set; }
         public int? CreatedBy { get; set; }

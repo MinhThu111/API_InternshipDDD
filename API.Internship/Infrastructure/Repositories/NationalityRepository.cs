@@ -26,7 +26,7 @@ namespace API.Internship.Infrastructure.Repositories
             return await Task.Run(() => interData);
 
         }
-        public async Task<Nationality> GetId(int id)
+        public async Task<Nationality> GetId(int? id)
         {
             var query = GetAll().Where(w => w.Status != -1).AsNoTracking().FirstOrDefault(f => f.Id == id);
             return await Task.Run(() => query);
