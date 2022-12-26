@@ -57,6 +57,25 @@ namespace API.Internship.OPS.Controllers
                 res.error = new error { code = -1, message = ex.Message };
             }
             return res;
+        }        
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> GetListNewsCategoryMenu()
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                Expression<Func<NewsCategory, bool>> filter;
+                filter = w => w.Status == 1;
+                res = await _newsCategoryService.GetListAsync(filter);
+                res = await _newsCategoryHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
         }
         [HttpGet]
         public async Task<ActionResult<R_Data>> getNewCategoryMenu()
