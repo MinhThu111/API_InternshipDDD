@@ -11,17 +11,14 @@ namespace API.Internship.OPS.Controllers
     [Route("[controller]/[Action]"), ApiController]
     public class PersonController : ControllerBase
     {
-        private readonly ILogger<PersonController> _logger;
         private readonly IPersonService _personService;
         private readonly IPersonHelper _personHelper;
 
-        public PersonController(ILogger<PersonController> logger, IPersonService gradeService, IPersonHelper gradeHelper)
+        public PersonController(IPersonService gradeService, IPersonHelper gradeHelper)
         {
-            _logger = logger;
             _personService = gradeService;
             _personHelper = gradeHelper;
         }
-
         [HttpGet]
         public async Task<ActionResult<R_Data>> getListPersonBySequenceStatus(string sequenceStatus,string lstpersontypeid)
         {
@@ -57,7 +54,6 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-
         [HttpGet]
         public async Task<ActionResult<R_Data>> getPersonById(int id)
         {
@@ -169,7 +165,7 @@ namespace API.Internship.OPS.Controllers
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _personService.PutAsync(item.FirstName, item.LastName, item.PersonTypeId, item.Birthday, item.Gender, item.NationalityId,item.ReligionId, item.FolkId, item.AddressId, item.PhoneNumber, item.Email);
+                res = await _personService.PutAsync(item.FirstName, item.LastName, item.PersonTypeId, item.Birthday, item.Gender, item.NationalityId,item.ReligionId, item.FolkId, item.AddressId, item.PhoneNumber, item.Email,item.AvatarUrl);
                 res = await _personHelper.MergeData(res);
             }
             catch (Exception ex)

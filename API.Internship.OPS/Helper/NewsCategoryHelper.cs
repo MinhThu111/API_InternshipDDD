@@ -2,6 +2,8 @@
 using API.Internship.ResData;
 using System.Reflection;
 using API.Internship.Domain.Services;
+using System.Linq.Expressions;
+
 namespace API.Internship.OPS.Helper
 {
     public interface INewsCategoryHelper
@@ -13,11 +15,15 @@ namespace API.Internship.OPS.Helper
     public class NewsCategoryHelper: INewsCategoryHelper
     {
         private readonly ILogger<NewsCategoryHelper> _logger;
-        public NewsCategoryHelper(ILogger<NewsCategoryHelper> logger)
+
+        private readonly INewsCategoryService _newscategoryService;
+
+        public NewsCategoryHelper(ILogger<NewsCategoryHelper> logger, INewsCategoryService newscategoryService)
         {
             _logger = logger;
-        
+            _newscategoryService = newscategoryService;
         }
+
         public async Task<R_Data> MergeData(R_Data res)
         {
             try
@@ -81,21 +87,37 @@ namespace API.Internship.OPS.Helper
             {
                 if (res.result == 1 && res.data != null)
                 {
+                    List< NewsCategory> NewsCategoryObjs = res.data;
 
-                    var NewsCategoryObjs = res.data;
-                    foreach (var NewsCategoryObj in NewsCategoryObjs)
+                    List<NewsCategory> lstparent = NewsCategoryObjs.Where(w => w.ParentId == 0).ToList();
+                    lstparent.ForEach(async obj =>
                     {
-                        Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
-                        Type myType = NewsCategoryObj.GetType();
+                        Type myType = obj.GetType();
                         IList<PropertyInfo> props = new List<PropertyInfo>(myType.GetProperties());
+                        Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
                         foreach (PropertyInfo prop in props)
                         {
-                            dict.Add(prop.Name, prop.GetValue(NewsCategoryObj));
+                            dict.Add(prop.Name, prop.GetValue(obj));
+                        }
+                        Expression<Func<NewsCategory, bool>> filter;
+                        filter = w => w.Status == 1 && w.ParentId==obj.Id;
+                        filter.Compile();
+                        R_Data reschild = _newscategoryService.GetListAsync(filter).Result;
+                        if (reschild.result == 1 && reschild.data != null)
+                        {
+
+                            dict.Add("ChildMenu", reschild.data);
+
                         }
                         lstdict.Add(dict);
-                    }
+
+                    });
+
+
                     res.data = lstdict;
+
                 }
+
             }
             catch (Exception ex)
             {

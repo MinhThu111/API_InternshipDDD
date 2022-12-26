@@ -108,7 +108,6 @@ public class PositionService: IPositionService
         }
         return await Task.Run(() => res);
     }
-
     public async Task<R_Data> PutAsync(int id, string name, DateTime timer, string positioncode, int? updateby)
     {
         error errObj = new error();
@@ -153,7 +152,6 @@ public class PositionService: IPositionService
 
         return await Task.Run(() => res);
     }
-
     public async Task<R_Data> PutAsync(string name, string positioncode, string remark)
     {
         error errObj = new error();

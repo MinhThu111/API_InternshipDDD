@@ -20,7 +20,6 @@ namespace API.Internship.OPS.Controllers
             _addressService = addressService;
             _addressHelper = addressHelper;
         }
-
         [HttpGet]
         public async Task<ActionResult<R_Data>> getListAddressBySequenceStatus(string sequenceStatus)
         {

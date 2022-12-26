@@ -35,19 +35,19 @@ namespace API.Internship.OPS.Helper
                     }
 
                     //NewCategoryObj
-                    dict.Add("NewCategoryObj", new Dictionary<string, dynamic>());
-                    R_Data resCountry = _newsCategoryCategoryService.GetAsync((int)NewsObj.NewsCategoryId).Result;
-                    if (resCountry.result == 1 && resCountry.data != null)
+                    dict.Add("newscategoryObj", new Dictionary<string, dynamic>());
+                    R_Data resnewscategory = _newsCategoryCategoryService.GetAsync((int)NewsObj.NewsCategoryId).Result;
+                    if (resnewscategory.result == 1 && resnewscategory.data != null)
                     {
-                        NewsCategory newscategoryitem = resCountry.data;
-                        dict["CountryObj"] = new
+                        NewsCategory newscategoryitem = resnewscategory.data;
+                        dict["newscategoryObj"] = new
                         {
                             newscategoryitem.Id,
-                            newscategoryitem.Name
+                            newscategoryitem.Name,
+                            newscategoryitem.Type
+
                         };
                     }
-
-                    
                     res.data = dict;
                 }
             }
@@ -75,6 +75,19 @@ namespace API.Internship.OPS.Helper
                         foreach (PropertyInfo prop in props)
                         {
                             dict.Add(prop.Name, prop.GetValue(NewsObj));
+                        }
+                        dict.Add("newscategoryObj", new Dictionary<string, dynamic>());
+                        R_Data resnewscategory = _newsCategoryCategoryService.GetAsync((int)NewsObj.NewsCategoryId).Result;
+                        if (resnewscategory.result == 1 && resnewscategory.data != null)
+                        {
+                            NewsCategory newscategoryitem = resnewscategory.data;
+                            dict["newscategoryObj"] = new
+                            {
+                                newscategoryitem.Id,
+                                newscategoryitem.Name,
+                                newscategoryitem.Type
+
+                            };
                         }
                         lstdict.Add(dict);
                     });

@@ -15,7 +15,7 @@ namespace API.Internship.Domain.Services
         //Task<R_Data> GetListAsync(string status);
         Task<R_Data> Delete(int id, int? updatedBy);
         Task<R_Data> PutAsync(int id, string firstname, string lastname, int? gender, int persontypeid, DateTime timer, int? status, int? addressid, string phonenumber, string email);
-        Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email);
+        Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email, string avatarurl);
         Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer);
     }
     public class PersonService: IPersonService
@@ -27,7 +27,6 @@ namespace API.Internship.Domain.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-
 
         public async Task<R_Data> GetAsync(int id)
         {
@@ -88,11 +87,11 @@ namespace API.Internship.Domain.Services
                                 group item by item.PersonTypeId into lstitem
                                 select new
                                 {
-                                    id = lstitem.Key,
+                                    name = lstitem.Key==1?"student":"teacher",
                                     count = lstitem.Count(),
                                 };
 
-                if (datacount.Count() <= 0)
+                if (datacount.Count()   <= 0)
                     errObj.message = "Load data is successful and do not data to show!";
                 else
                     res.data = datacount;
@@ -106,52 +105,6 @@ namespace API.Internship.Domain.Services
             return res;
 
         }
-        //public async Task<R_Data>GetListAsync(string status)
-        //{
-        //    List<int?> lstStatus = new List<int?>();
-        //    if (string.IsNullOrEmpty(status))
-        //        return new R_Data() { result = 0, data = null, error = new error() { code = 201, message = "Dãy trạng thái chưa nhập giá trị. Dãy trạng thái là ký số và cách nhau bởi dấu phẩy [,]" } };
-        //    try
-        //    {
-        //        foreach (string s in status.Split(","))
-        //            if (!string.IsNullOrEmpty(s))
-        //                lstStatus.Add(Convert.ToInt32(s.Replace(".", "").Replace(" ", "")));
-        //    }
-        //    catch (Exception) { }
-        //    Expression<Func<Person, bool>> filter;
-        //    filter = w => w.Status == 1;
-        //    filter.Compile();
-
-        //    error errObj = new error();
-        //    R_Data res = new R_Data() { result = 1, data = null, error = errObj };
-        //    try
-        //    {
-        //        var lstperson = (await _unitOfWork.PersonRepository.ListAsync(filter)).ToList();
-        //        var datas = lstperson.Where(x=> lstStatus.Contains(x.Status)).Select( x=>  new
-        //        {
-        //            id = x.Id,
-        //            firstname = x.FirstName,
-        //            lastname = x.LastName,
-        //            gender = x.Gender,
-        //            birthday = x.Birthday,
-        //            email = x.Email,
-        //            //career = (await _unitOfWork.PersonTypeRepository.GetId(x.PersonTypeId)).Name,
-        //            //nationality = ( _unitOfWork.NationalityRepository.GetId(x.NationalityId)),
-        //            status = x.Status
-        //        });
-        //        if (lstperson.Count()<0)
-        //            errObj.message = "Load data is successful and do not data to show!";
-        //        else
-        //            res.data = datas;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res.result = 0;
-        //        res.data = null;
-        //        res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi đọc dữ liệu {ex}" };
-        //    }
-        //    return res;
-        //}
         public async Task<R_Data> Delete(int id, int? updatedBy)
         {
             error errObj = new error();
@@ -246,7 +199,7 @@ namespace API.Internship.Domain.Services
             return res;
 
         }
-        public async Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email)
+        public async Task<R_Data> PutAsync(string fsname, string lsname, int persontypeid, DateTime? birthday, int? gender, int? nationalityid, int? regilionid, int? folkid, int? addressid, string phone, string email, string avatarurl)
         {
             error errObj = new error();
             R_Data res = new R_Data { result = 1, data = null, error = errObj };
@@ -269,6 +222,7 @@ namespace API.Internship.Domain.Services
                 AddressId = addressid,
                 PhoneNumber = phone,
                 Email = email,
+                AvatarUrl=avatarurl,
                 Timer = DateTime.Now,
                 CreatedAt = DateTime.Now
             };

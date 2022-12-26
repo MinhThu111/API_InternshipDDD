@@ -372,6 +372,10 @@ namespace API.Internship.Infrastructure.Data
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
+                entity.Property(e => e.AvatarUrl)
+                    .HasMaxLength(250)
+                    .HasColumnName("avatar_url");
+
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime")
                     .HasColumnName("created_at");
@@ -520,6 +524,10 @@ namespace API.Internship.Infrastructure.Data
                     .HasColumnName("id");
 
                 entity.Property(e => e.AddressId).HasColumnName("address_id");
+
+                entity.Property(e => e.AvatarUrl)
+                    .HasMaxLength(250)
+                    .HasColumnName("avatar_url");
 
                 entity.Property(e => e.Birthday)
                     .HasColumnType("datetime")

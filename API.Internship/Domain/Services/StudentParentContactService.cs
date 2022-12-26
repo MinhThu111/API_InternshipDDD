@@ -108,7 +108,6 @@ namespace API.Internship.Domain.Services
             }
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(int id, int studentid, int parentcontactid, DateTime? timer)
         {
             error errObj = new error();
@@ -152,7 +151,6 @@ namespace API.Internship.Domain.Services
 
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(int studentid, int parentcontactid)
         {
             error errObj = new error();

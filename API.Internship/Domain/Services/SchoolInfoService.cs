@@ -110,7 +110,6 @@ public class SchoolInfoService: ISchoolInfoService
         }
         return res;
     }
-
     public async Task<R_Data> PutAsync(int id, string name, DateTime timer, string nameen, string solgan, int? updateby, DateTime? establish)
     {
         error errObj = new error();
@@ -157,7 +156,6 @@ public class SchoolInfoService: ISchoolInfoService
 
         return res;
     }
-
     public async Task<R_Data> PutAsync(string name, string nameen, int? addressid, string solgan, DateTime? establish)
     {
         error errObj = new error();
