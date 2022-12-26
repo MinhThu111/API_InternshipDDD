@@ -142,3 +142,4 @@ C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.I
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.pdb
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.genruntimeconfig.cache
 C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\ref\API.Internship.OPS.dll
+C:\Users\haing\Downloads\Telegram Desktop\InternshipDDD_demo\InternshipDDD\API.Internship.OPS\obj\Debug\net6.0\API.Internship.OPS.MvcApplicationPartsAssemblyInfo.cs

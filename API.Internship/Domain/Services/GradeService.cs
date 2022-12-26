@@ -45,7 +45,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> GetListAsync(Expression<Func<Grade, bool>> expression)
         {
             error errObj = new error();
@@ -68,8 +67,6 @@ namespace API.Internship.Domain.Services
             return res;
 
         }
-
-
         public async Task<R_Data> PutAsync(string name, string classCode, int? teacherId, string remark, int? createdBy)
         {
             error errObj = new error();
@@ -115,7 +112,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> PutAsync(int id, string name, string classCode, int? teacherId, string remark, int? status, int? updatedBy, DateTime timer)
         {
             error errObj = new error();
@@ -171,7 +167,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> PutAsync(int id, int? status, int? updatedBy, DateTime timer)
         {
             error errObj = new error();
@@ -228,7 +223,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> Delete(int id, int? updatedBy)
         {
             error errObj = new error();

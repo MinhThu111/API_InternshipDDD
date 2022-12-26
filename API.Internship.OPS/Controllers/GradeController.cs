@@ -39,7 +39,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpGet]
     public async Task<ActionResult<R_Data>> getListGrade()
     {
@@ -60,7 +59,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpGet]
     public async Task<ActionResult<R_Data>> getListGradeByStatus(int? status)
     {
@@ -81,7 +79,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpGet]
     public async Task<ActionResult<R_Data>> getListGradeBySequenceStatus(string sequenceStatus)
     {
@@ -112,7 +109,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpPost]
     public async Task<ActionResult<R_Data>> Create(Grade ori)
     {
@@ -130,7 +126,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpPut]
     public async Task<ActionResult<R_Data>> Update(Grade ori)
     {
@@ -148,7 +143,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpPut]
     public async Task<ActionResult<R_Data>> UpdateStatus(Grade ori)
     {
@@ -166,7 +160,6 @@ public class GradeController : ControllerBase
         }
         return res;
     }
-
     [HttpDelete]
     public async Task<ActionResult<R_Data>> Delete(int id, int? updatedBy)
     {

@@ -92,7 +92,7 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<R_Data>> Create(Position item)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };

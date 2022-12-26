@@ -8,6 +8,7 @@ namespace API.Internship.Domain.Services
     {
         Task<R_Data> GetAsync(int id);
         Task<R_Data> GetListAsync(Expression<Func<NewsCategory, bool>> expression);
+        Task<R_Data> GetListAsync();
         Task<R_Data> Delete(int id, int? updatedBy);
         Task<R_Data> PutAsync(int id, int? parentid,string name, int? type, DateTime? timer, int? updateby);
         Task<R_Data> PutAsync(int? parentid, string name, int? type, DateTime? timer, int? updateby);
@@ -71,6 +72,39 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
+        public async Task<R_Data> GetListAsync()
+        {
+            error errObj = new error();
+            R_Data res = new R_Data { result = 1, data = null, error = errObj };
+            var lstObj = await Task.FromResult<List<NewsCategory>>(new List<NewsCategory>());
+            try
+            {
+                Expression<Func<NewsCategory, bool>> filter;
+                filter = w => w.Status == 1;
+                filter.Compile();
+                lstObj = (await _unitOfWork.NewsCategoryRepository.ListAsync(filter)).ToList();
+               
+
+
+
+
+                if (lstObj == null)
+                {
+                    errObj.message = "Load data is successful and do not data to show!";
+                }
+                else
+                {
+                    res.data = lstObj;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = 201, message = $"Exception: Xẩy ra lỗi khi đọc dữ liệu {ex}" };
+            }
+            return res;
+        }
         public async Task<R_Data> Delete(int id, int? updateby)
         {
             error errObj = new error();
@@ -107,7 +141,6 @@ namespace API.Internship.Domain.Services
             }
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(int id, int? parentid, string name, int? type, DateTime? timer, int? updateby)
         {
             error errObj = new error();
@@ -153,7 +186,6 @@ namespace API.Internship.Domain.Services
 
             return await Task.Run(() => res);
         }
-
         public async Task<R_Data> PutAsync(int? parentid, string name, int? type, DateTime? timer, int? updateby)
         {
             error errObj = new error();

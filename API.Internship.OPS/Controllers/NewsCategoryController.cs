@@ -22,7 +22,7 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetNewsCategoryById(int id)
+        public async Task<ActionResult<R_Data>> getNewsCategoryById(int id)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -39,7 +39,27 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetListNewsCategory()
+        public async Task<ActionResult<R_Data>> getListNewsCategory()
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                Expression<Func<NewsCategory, bool>> filter;
+                filter = w => w.Status == 1;
+                filter.Compile();
+                res = await _newsCategoryService.GetListAsync(filter);
+                res = await _newsCategoryHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }        
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> GetListNewsCategoryMenu()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -48,6 +68,23 @@ namespace API.Internship.OPS.Controllers
                 filter = w => w.Status == 1;
                 res = await _newsCategoryService.GetListAsync(filter);
                 res = await _newsCategoryHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getNewCategoryMenu()
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                res = await _newsCategoryService.GetListAsync();
+                res = await _newsCategoryHelper.MergeDynamicList(res);
             }
             catch (Exception ex)
             {
@@ -91,7 +128,7 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult<R_Data>> Create(NewsCategory item)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };

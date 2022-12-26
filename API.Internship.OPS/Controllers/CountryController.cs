@@ -20,8 +20,6 @@ namespace API.Internship.OPS.Controllers
             _countryService = countryService;
             _countryHelper = countryHelper;
         }
-
-
         [HttpGet]
         public async Task<ActionResult<R_Data>> getListAddressBySequenceStatus(string sequenceStatus)
         {
@@ -139,7 +137,6 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-
         [HttpPut]
         public async Task<ActionResult<R_Data>> UpdateStatus(Address ori)
         {

@@ -61,7 +61,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> GetAsync(int id)
         {
             error errObj = new error();
@@ -140,7 +139,6 @@ namespace API.Internship.Domain.Services
             }
             return res;
         }
-
         public async Task<R_Data> PutAsync( string addresstext, int provinceid, int districtid, int wardid) 
         {
             error errObj = new error();
@@ -186,7 +184,6 @@ namespace API.Internship.Domain.Services
 
             return res;
         }
-
         public async Task<R_Data> PutAsync(int id, string addresstext, int provinceid, int districtid, int wardid, DateTime? timer)
         {
             error errObj = new error();
