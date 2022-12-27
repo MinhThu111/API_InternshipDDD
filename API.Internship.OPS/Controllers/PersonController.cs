@@ -142,13 +142,13 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPut]
-        public async Task<ActionResult<R_Data>> UpdateStatus(Person ori)
+        [HttpPost]
+        public async Task<ActionResult<R_Data>>Create(Person item)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _personService.PutAsync(ori.Id, ori.Status ?? 0, ori.UpdatedBy ?? 0, ori.Timer);
+                res = await _personService.PutAsync(item.FirstName, item.LastName, item.PersonTypeId, item.Birthday, item.Gender, item.NationalityId,item.ReligionId, item.FolkId, item.AddressId, item.PhoneNumber, item.Email,item.AvatarUrl);
                 res = await _personHelper.MergeData(res);
             }
             catch (Exception ex)
@@ -159,13 +159,13 @@ namespace API.Internship.OPS.Controllers
             }
             return res;
         }
-        [HttpPost]
-        public async Task<ActionResult<R_Data>>Create(Person item)
+        [HttpPut]
+        public async Task<ActionResult<R_Data>> UpdateStatus(Person ori)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
-                res = await _personService.PutAsync(item.FirstName, item.LastName, item.PersonTypeId, item.Birthday, item.Gender, item.NationalityId,item.ReligionId, item.FolkId, item.AddressId, item.PhoneNumber, item.Email,item.AvatarUrl);
+                res = await _personService.PutAsync(ori.Id, ori.Status ?? 0, ori.UpdatedBy ?? 0, ori.Timer);
                 res = await _personHelper.MergeData(res);
             }
             catch (Exception ex)

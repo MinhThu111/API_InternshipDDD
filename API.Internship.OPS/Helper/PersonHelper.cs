@@ -274,18 +274,6 @@ namespace API.Internship.OPS.Helper
                                 dictitem.Add(prop.Name, prop.GetValue(addressitem));
                             }
 
-                            ////country obj
-                            //dictitem.Add("CountryObj", new Dictionary<string, dynamic>());
-                            //R_Data resCountry = _countryService.GetAsync((int)addressitem.CountryId).Result;
-                            //if (resCountry.result == 1 && resCountry.data != null)
-                            //{
-                            //    Country countryitem = resCountry.data;
-                            //    dictitem["CountryObj"] = new
-                            //    {
-                            //        countryitem.Id,
-                            //        countryitem.Name
-                            //    };
-                            //}
                             //ProvinceId obj
                             dictitem.Add("ProvinceObj", new Dictionary<string, dynamic>());
                             R_Data resProvince = _provinceService.GetAsync((int)addressitem.ProvinceId).Result;
@@ -342,8 +330,6 @@ namespace API.Internship.OPS.Helper
             }
             return await Task.Run(() => res);
         }
-
-
         public async Task<R_Data> MergeDynamicList(R_Data res)
         {
             List<Dictionary<string, dynamic>> lstdict = new List<Dictionary<string, dynamic>>();

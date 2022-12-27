@@ -22,7 +22,7 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetSubjectById(int id)
+        public async Task<ActionResult<R_Data>> getSubjectById(int id)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -39,7 +39,7 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetListSubject()
+        public async Task<ActionResult<R_Data>> getListSubject()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try

@@ -22,7 +22,7 @@ namespace API.Internship.OPS.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetTeacherSubjectById(int id)
+        public async Task<ActionResult<R_Data>> getTeacherSubjectById(int id)
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
@@ -39,13 +39,32 @@ namespace API.Internship.OPS.Controllers
             return res;
         }
         [HttpGet]
-        public async Task<ActionResult<R_Data>> GetListTeacherSubject()
+        public async Task<ActionResult<R_Data>> getListTeacherSubject()
         {
             R_Data res = new R_Data { result = 1, data = null, error = new error() };
             try
             {
                 Expression<Func<TeacherSubject, bool>> filter;
                 filter = w => w.Status == 1;
+                res = await _TeacherSubjectService.GetListAsync(filter);
+                res = await _TeacherSubjectHelper.MergeDataList(res);
+            }
+            catch (Exception ex)
+            {
+                res.result = 0;
+                res.data = null;
+                res.error = new error { code = -1, message = ex.Message };
+            }
+            return res;
+        }
+        [HttpGet]
+        public async Task<ActionResult<R_Data>> getListTeacherByIdSubject(int id)
+        {
+            R_Data res = new R_Data { result = 1, data = null, error = new error() };
+            try
+            {
+                Expression<Func<TeacherSubject, bool>> filter;
+                filter = w => w.Status == 1 && w.SubjectId==id;
                 res = await _TeacherSubjectService.GetListAsync(filter);
                 res = await _TeacherSubjectHelper.MergeDataList(res);
             }
