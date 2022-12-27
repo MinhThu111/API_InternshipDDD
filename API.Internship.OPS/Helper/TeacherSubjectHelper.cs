@@ -205,6 +205,34 @@ namespace API.Internship.OPS.Helper
                         {
                             dict.Add(prop.Name, prop.GetValue(TeacherSubjectObj));
                         }
+                        //subject obj
+                        dict.Add("SubjectObj", new Dictionary<string, dynamic>());
+                        R_Data resSubject = _subjectService.GetAsync((int)TeacherSubjectObj.SubjectId).Result;
+                        if (resSubject.result == 1 && resSubject.data != null)
+                        {
+                            Subject subjectitem = resSubject.data;
+                            dict["SubjectObj"] = new
+                            {
+                                subjectitem.Id,
+                                subjectitem.Name
+                            };
+                        }
+
+                        //teachetid obj
+                        //dict.Add("TeacherObj", new Dictionary<string, dynamic>());
+                        R_Data resTeacher = _personService.GetAsync((int)TeacherSubjectObj.TeacherId).Result;
+                        if (resTeacher.result == 1 && resTeacher.data != null)
+                        {
+                            Person personitem = resTeacher.data;
+                            Dictionary<string, dynamic> dictitem = new Dictionary<string, dynamic>();
+                            Type PersonType = personitem.GetType();
+                            IList<PropertyInfo> Personprops = new List<PropertyInfo>(PersonType.GetProperties());
+                            foreach (PropertyInfo prop in Personprops)
+                            {
+                                dictitem.Add(prop.Name, prop.GetValue(personitem));
+                            }
+                            dict.Add("TeacherObj", dictitem);
+                        }
                         lstdict.Add(dict);
                     });
                     res.data = lstdict;

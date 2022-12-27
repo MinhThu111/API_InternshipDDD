@@ -1,4 +1,5 @@
 ﻿using API.Internship.Domain.Models;
+using API.Internship.Domain.Services;
 using API.Internship.ResData;
 using System.Reflection;
 
@@ -13,10 +14,12 @@ namespace API.Internship.OPS.Helper
     public class GradeHelper : IGradeHelper
     {
         private readonly ILogger<GradeHelper> _logger;
+        private readonly IPersonService _personService;
 
-        public GradeHelper(ILogger<GradeHelper> logger)
+        public GradeHelper(ILogger<GradeHelper> logger, IPersonService personService)
         {
             _logger = logger;
+            _personService = personService;
         }
 
         public async Task<R_Data> MergeData(R_Data res)
@@ -60,6 +63,19 @@ namespace API.Internship.OPS.Helper
                         foreach (PropertyInfo prop in props)
                         {
                             dict.Add(prop.Name, prop.GetValue(gradeObj));
+                        }
+                        R_Data resTeacher = _personService.GetAsync((int)gradeObj.TeacherId).Result;
+                        if (resTeacher.result == 1 && resTeacher.data != null)
+                        {
+                            Person personitem = resTeacher.data;
+                            Dictionary<string, dynamic> dictitem = new Dictionary<string, dynamic>();
+                            Type PersonType = personitem.GetType();
+                            IList<PropertyInfo> Personprops = new List<PropertyInfo>(PersonType.GetProperties());
+                            foreach (PropertyInfo prop in Personprops)
+                            {
+                                dictitem.Add(prop.Name, prop.GetValue(personitem));
+                            }
+                            dict.Add("TeacherObj", dictitem);
                         }
                         lstdict.Add(dict);
                     });

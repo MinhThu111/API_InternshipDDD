@@ -3,6 +3,9 @@ using API.Internship.Domain.Models;
 using API.Internship.ResData;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using System.Text;
+
 namespace API.Internship.Domain.Services
 {
     public interface INewsService
@@ -207,12 +210,17 @@ namespace API.Internship.Domain.Services
             if (idMax.code != 1)
                 throw new Exception();
 
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = title.Normalize(NormalizationForm.FormD);
+            string titleSlug= regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
+            titleSlug= titleSlug.Replace(' ','-');
+
             News item = new News()
             {
                 Id = idMax.data + 1,
                 NewsCategoryId = newscategoryid,
                 Title = title,
-                TitleSlug = null,
+                TitleSlug = titleSlug,
                 Description = description,
                 Detail = detail,
                 AvatarUrl= avatarurl,
